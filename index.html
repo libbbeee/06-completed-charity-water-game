@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ripple of Change</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-shell">
+        <header class="hud">
+            <div class="stat-card">
+                <span class="label">Vitality Points 💕</span>
+                <span id="vitality-value" class="value">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Trash Collected</span>
+                <span id="trash-value" class="value">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Fish in Pond</span>
+                <span id="fish-value" class="value">0</span>
+            </div>
+        </header>
+
+        <main class="game-layout">
+            <section class="lake-panel">
+                <div class="lake-header">
+                    <h2>Ripple of Change</h2>
+                    <p id="environment-status">The first lake section is waiting to be cleaned.</p>
+                </div>
+
+                <div class="lake-area">
+                    <div class="world" id="world"></div>
+
+                    <button id="bucket-button" class="bucket-button" type="button" aria-label="Collect vitality">
+                        <img src="img/water-can-transparent.png" alt="Water can">
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <section class="shop-panel">
+            <h3>Community Shop</h3>
+            <div class="shop-buttons">
+                <button class="shop-button" data-upgrade="Clean Water" type="button">
+                    Clean Water<br>
+                    <span>Cost: 20💕</span>
+                </button>
+                <button class="shop-button" data-upgrade="Buy Fish" type="button">
+                    Buy Fish<br>
+                    <span>Cost: 15💕</span>
+                </button>
+                <button class="shop-button" data-upgrade="Build Well" type="button">
+                    Build Well<br>
+                    <span>Cost: 20 Trash</span>
+                </button>
+            </div>
+            <button id="reset-button" class="reset-button" type="button">Reset Game</button>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

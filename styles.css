@@ -1,0 +1,444 @@
+/* Charity: water Brand Colors
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e8f4f6, #bfe0dc);
+    color: #17313d;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-shell {
+    width: min(100%, 960px);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    box-shadow: 0 16px 40px rgba(23, 49, 61, 0.16);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 180px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 8px 20px rgba(23, 49, 61, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 0.95rem;
+    color: #5d7381;
+}
+
+.value {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #1d5063;
+}
+
+.lake-panel,
+.shop-panel {
+    background: #f4f8f9;
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.lake-header {
+    margin-bottom: 12px;
+}
+
+.lake-header h2 {
+    margin: 0 0 6px;
+    color: #1d5063;
+}
+
+.lake-header p {
+    margin: 0;
+    color: #51707d;
+}
+
+.lake-area {
+    position: relative;
+    min-height: 420px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #78b9b0 0%, #3f8a73 100%);
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.lake-area::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(30, 84, 68, 0.14);
+}
+
+.world {
+    position: absolute;
+    inset: 0;
+    transform-origin: center center;
+    transition: transform 0.8s ease;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 18px;
+    padding: 24px;
+}
+
+.lake-section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 120px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-radius: 24px;
+    background: linear-gradient(180deg, #5e8f72 0%, #416e58 100%);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.35s ease, filter 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.16);
+}
+
+.lake-section.is-locked {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+.lake-section.is-selected {
+    border-color: #ffc907;
+    box-shadow: 0 0 0 3px rgba(255, 201, 7, 0.22);
+}
+
+.lake-section.section-dirty {
+    filter: saturate(0.7) brightness(0.8);
+}
+
+.lake-section.section-cleaning {
+    transform: scale(1.03);
+    filter: brightness(1.12);
+}
+
+.lake-section.section-clean {
+    background: linear-gradient(180deg, #4cc0ff 0%, #2e9df7 100%);
+    filter: brightness(1.04);
+}
+
+.section-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.24);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.section-progress {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    overflow: hidden;
+}
+
+.section-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ffc907 0%, #2e9df7 100%);
+    transform-origin: left center;
+    transition: width 0.3s ease;
+}
+
+.section-progress-text {
+    display: none;
+}
+
+.section-trash-layer,
+.section-plants,
+.section-fish {
+    position: absolute;
+    transition: opacity 0.3s ease;
+}
+
+.section-trash-layer {
+    inset: 0;
+    pointer-events: none;
+}
+
+.section-trash-item {
+    position: absolute;
+    font-size: 1.4rem;
+    cursor: pointer;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.section-trash-item:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+.section-plants {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.6rem;
+    opacity: 0;
+}
+
+.section-fish {
+    top: 46px;
+    right: 14px;
+    font-size: 1.2rem;
+    opacity: 0;
+}
+
+.section-fish.heart-pulse {
+    animation: fish-heart 900ms ease-out;
+}
+
+.section-fish.heart-pulse::after {
+    content: '💕';
+    position: absolute;
+    left: 50%;
+    top: -18px;
+    transform: translateX(-50%) scale(0.9);
+    opacity: 0;
+    animation: heart-pop 900ms ease-out forwards;
+}
+
+@keyframes fish-heart {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    25% {
+        transform: scale(1.3);
+    }
+    50% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes heart-pop {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(0) scale(0.8);
+    }
+    30% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-8px) scale(1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-24px) scale(0.8);
+    }
+}
+
+.lake-section.section-clean .section-trash {
+    opacity: 0;
+}
+
+.lake-section.section-clean .section-plants {
+    opacity: 1;
+}
+
+.lake-section.section-clean .section-fish {
+    opacity: 1;
+}
+
+.bucket-button {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    z-index: 2;
+    border: 4px solid #8bd1cb;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(145deg, #c6eeff, #7fd3ff);
+    box-shadow: 0 10px 20px rgba(23, 49, 61, 0.18), inset 0 2px 6px rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bucket-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.18));
+}
+
+.bucket-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 24px rgba(23, 49, 61, 0.24), inset 0 2px 6px rgba(255, 255, 255, 0.7);
+}
+
+.bucket-button:active,
+.bucket-button.active {
+    transform: scale(0.94);
+    filter: brightness(1.04);
+}
+
+.bucket-button:focus-visible {
+    outline: 3px solid rgba(46, 157, 247, 0.45);
+    outline-offset: 3px;
+}
+
+.heart-burst {
+    position: absolute;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 3;
+    animation: heart-pop 700ms ease-out forwards;
+    --drift-x: 0px;
+    --drift-y: 0px;
+}
+
+@keyframes heart-pop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translate(calc(-50% + var(--drift-x)), calc(-50% + var(--drift-y))) scale(1.1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--drift-x) * 1.8), calc(-50% + var(--drift-y) * 1.4)) scale(0.7);
+    }
+}
+
+.shop-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.shop-panel h3 {
+    margin: 0;
+    color: #1d5063;
+}
+
+.shop-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.shop-button,
+.reset-button {
+    border: none;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.shop-button {
+    flex: 1;
+    min-width: 140px;
+    background: #2e9df7;
+    color: white;
+    box-shadow: 0 8px 16px rgba(46, 157, 247, 0.2);
+}
+
+.shop-button:hover,
+.reset-button:hover {
+    transform: translateY(-2px);
+}
+
+.shop-button span {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.reset-button {
+    background: #f5402c;
+    color: white;
+    align-self: flex-start;
+}
+
+@media (max-width: 700px) {
+    body {
+        padding: 12px;
+    }
+
+    .game-shell {
+        padding: 16px;
+    }
+
+    .hud {
+        flex-direction: column;
+    }
+
+    .shop-buttons {
+        flex-direction: column;
+    }
+
+    .bucket-button {
+        width: 84px;
+        height: 84px;
+        font-size: 2.5rem;
+    }
+
+    .lake-section {
+        width: 170px;
+        height: 120px;
+    }
+}
