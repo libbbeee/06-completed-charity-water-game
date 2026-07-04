@@ -40,25 +40,38 @@
             </section>
         </main>
 
+        <section class="difficulty-panel">
+            <h3>Choose Difficulty</h3>
+            <div class="difficulty-buttons">
+                <button class="difficulty-button" data-difficulty="easy" type="button">Easy</button>
+                <button class="difficulty-button active" data-difficulty="medium" type="button">Medium</button>
+                <button class="difficulty-button" data-difficulty="hard" type="button">Hard</button>
+            </div>
+        </section>
+
         <section class="shop-panel">
             <h3>Community Shop</h3>
             <div class="shop-buttons">
                 <button class="shop-button" data-upgrade="Clean Water" type="button">
                     Clean Water<br>
-                    <span>Cost: 20💕</span>
+                    <span id="clean-water-cost">Cost: 20💕</span>
                 </button>
                 <button class="shop-button" data-upgrade="Buy Fish" type="button">
                     Buy Fish<br>
-                    <span>Cost: 15💕</span>
+                    <span id="buy-fish-cost">Cost: 15💕</span>
                 </button>
                 <button class="shop-button" data-upgrade="Build Well" type="button">
                     Build Well<br>
-                    <span>Cost: 20 Trash</span>
+                    <span id="build-well-cost">Cost: 20 Trash</span>
                 </button>
             </div>
             <button id="reset-button" class="reset-button" type="button">Reset Game</button>
         </section>
     </div>
+
+    <footer class="site-footer">
+        <p>Support <a href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">charity: water</a> and help fund clean water projects.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>

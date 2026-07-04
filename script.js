@@ -2,6 +2,13 @@
 let vitality = 0;
 let trashCollected = 0;
 let selectedSectionId = 1;
+let currentDifficulty = 'medium';
+
+const difficultySettings = {
+    easy: { label: 'Easy', bucketGain: 2, cleanCost: 15, fishCost: 10, buildWellCost: 15, cleanupStep: 25, trashItemRange: [1, 2] },
+    medium: { label: 'Medium', bucketGain: 1, cleanCost: 20, fishCost: 15, buildWellCost: 20, cleanupStep: 25, trashItemRange: [1, 3] },
+    hard: { label: 'Hard', bucketGain: 1, cleanCost: 25, fishCost: 20, buildWellCost: 25, cleanupStep: 20, trashItemRange: [2, 4] }
+};
 
 // Get the HTML elements we will update.
 const vitalityValue = document.getElementById('vitality-value');
@@ -11,6 +18,10 @@ const environmentStatus = document.getElementById('environment-status');
 const bucketButton = document.getElementById('bucket-button');
 const world = document.getElementById('world');
 const shopButtons = document.querySelectorAll('.shop-button');
+const difficultyButtons = document.querySelectorAll('.difficulty-button');
+const cleanWaterCost = document.getElementById('clean-water-cost');
+const buyFishCost = document.getElementById('buy-fish-cost');
+const buildWellCost = document.getElementById('build-well-cost');
 const resetButton = document.getElementById('reset-button');
 
 // Each lake section is stored as an object in an array.
@@ -74,6 +85,44 @@ function updateUI() {
     updateEnvironment();
 }
 
+function getDifficultySettings() {
+    return difficultySettings[currentDifficulty];
+}
+
+function updateDifficultyButtons() {
+    difficultyButtons.forEach((button) => {
+        const isActive = button.dataset.difficulty === currentDifficulty;
+        button.classList.toggle('active', isActive);
+    });
+}
+
+function selectDifficulty(difficulty) {
+    if (!difficultySettings[difficulty]) {
+        return;
+    }
+
+    currentDifficulty = difficulty;
+    updateDifficultyButtons();
+    updateShopPrices();
+    setEnvironmentMessage(`${difficultySettings[difficulty].label} mode selected.`, 1800);
+}
+
+function updateShopPrices() {
+    const settings = getDifficultySettings();
+
+    if (cleanWaterCost) {
+        cleanWaterCost.textContent = `Cost: ${settings.cleanCost}💕`;
+    }
+
+    if (buyFishCost) {
+        buyFishCost.textContent = `Cost: ${settings.fishCost}💕`;
+    }
+
+    if (buildWellCost) {
+        buildWellCost.textContent = `Cost: ${settings.buildWellCost} Trash`;
+    }
+}
+
 // Add one vitality point when the bucket is clicked.
 function showHeartBurst() {
     const heart = document.createElement('span');
@@ -96,7 +145,7 @@ function showHeartBurst() {
 }
 
 function earnVitality() {
-    vitality += 1;
+    vitality += getDifficultySettings().bucketGain;
     updateUI();
     showHeartBurst();
 
@@ -151,7 +200,9 @@ function spawnTrashItems(section) {
     trashLayer.innerHTML = '';
     section.trashItems = [];
 
-    const numberOfItems = Math.floor(Math.random() * 4) + 1;
+    const settings = getDifficultySettings();
+    const [minItems, maxItems] = settings.trashItemRange;
+    const numberOfItems = Math.floor(Math.random() * (maxItems - minItems + 1)) + minItems;
 
     for (let i = 0; i < numberOfItems; i += 1) {
         const trashItem = document.createElement('div');
@@ -186,13 +237,15 @@ function cleanSection(sectionId) {
         return;
     }
 
-    if (vitality < 20) {
-        console.log('Not enough vitality points for Clean Water.');
+    const settings = getDifficultySettings();
+
+    if (vitality < settings.cleanCost) {
+        setEnvironmentMessage('You need more vitality points to clean this section.');
         return;
     }
 
-    vitality -= 20;
-    section.cleanliness = Math.min(100, section.cleanliness + 25);
+    vitality -= settings.cleanCost;
+    section.cleanliness = Math.min(100, section.cleanliness + settings.cleanupStep);
     section.element.classList.add('section-cleaning');
 
     setTimeout(() => {
@@ -287,7 +340,7 @@ function updateSectionProgress(section) {
 
 function buyFish(sectionId) {
     const section = lakeSections.find((item) => item.id === sectionId);
-    const cost = 15;
+    const cost = getDifficultySettings().fishCost;
 
     if (!section || !section.unlocked || !section.cleaned) {
         setEnvironmentMessage('Clean this section first to add fish to the pond.');
@@ -383,11 +436,19 @@ function setupEvents() {
         });
     });
 
+    difficultyButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            selectDifficulty(button.dataset.difficulty);
+        });
+    });
+
     resetButton.addEventListener('click', resetGame);
 }
 
 // Start the game.
 buildWorld();
 setupEvents();
+updateDifficultyButtons();
+updateShopPrices();
 startFishEarnings();
 updateUI();

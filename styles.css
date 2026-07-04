@@ -20,14 +20,16 @@ Secondary Colors:
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Proxima Nova', 'Arial', sans-serif;
     background: linear-gradient(135deg, #e8f4f6, #bfe0dc);
     color: #17313d;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    gap: 16px;
 }
 
 .game-shell {
@@ -363,17 +365,20 @@ body {
     }
 }
 
+.difficulty-panel,
 .shop-panel {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
+.difficulty-panel h3,
 .shop-panel h3 {
     margin: 0;
     color: #1d5063;
 }
 
+.difficulty-buttons,
 .shop-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -390,6 +395,24 @@ body {
     transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
+.difficulty-button {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    background: #ffffff;
+    color: #1d5063;
+    box-shadow: 0 4px 10px rgba(23, 49, 61, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.difficulty-button.active {
+    background: #159a48;
+    color: white;
+    box-shadow: 0 8px 16px rgba(21, 154, 72, 0.2);
+}
+
 .shop-button {
     flex: 1;
     min-width: 140px;
@@ -398,6 +421,7 @@ body {
     box-shadow: 0 8px 16px rgba(46, 157, 247, 0.2);
 }
 
+.difficulty-button:hover,
 .shop-button:hover,
 .reset-button:hover {
     transform: translateY(-2px);
@@ -414,6 +438,27 @@ body {
     align-self: flex-start;
 }
 
+.site-footer {
+    width: min(100%, 960px);
+    text-align: center;
+    color: #51707d;
+    font-size: 0.95rem;
+    background: #FFC907;
+    border: 1px solid rgba(46, 157, 247, 0.2);
+    border-radius: 16px;
+    padding: 14px 18px;
+    box-shadow: 0 8px 20px rgba(23, 49, 61, 0.08);
+}
+
+.site-footer a {
+    color: #2e9df7;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
 @media (max-width: 700px) {
     body {
         padding: 12px;
